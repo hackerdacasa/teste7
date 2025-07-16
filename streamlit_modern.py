@@ -223,12 +223,65 @@ for directory in [DOWNLOADS_DIR, UPLOADS_DIR]:
 @st.cache_resource
 def get_ffmpeg_info():
     try:
-        ffmpeg_result = subprocess.run(['which', 'ffmpeg'], capture_output=True, text=True)
-        ffmpeg_path = ffmpeg_result.stdout.strip() if ffmpeg_result.returncode == 0 else None
+        # Tentar múltiplos métodos para encontrar ffmpeg
+        ffmpeg_path = None
+        ffprobe_path = None
         
-        ffprobe_result = subprocess.run(['which', 'ffprobe'], capture_output=True, text=True)
-        ffprobe_path = ffprobe_result.stdout.strip() if ffprobe_result.returncode == 0 else None
+        # Método 1: which
+        try:
+            ffmpeg_result = subprocess.run(['which', 'ffmpeg'], capture_output=True, text=True)
+            if ffmpeg_result.returncode == 0:
+                ffmpeg_path = ffmpeg_result.stdout.strip()
+        except:
+            pass
         
+        # Método 2: whereis se which falhar
+        if not ffmpeg_path:
+            try:
+                ffmpeg_result = subprocess.run(['whereis', 'ffmpeg'], capture_output=True, text=True)
+                if ffmpeg_result.returncode == 0:
+                    paths = ffmpeg_result.stdout.split()
+                    for path in paths:
+                        if path.endswith('ffmpeg') and os.path.exists(path):
+                            ffmpeg_path = path
+                            break
+            except:
+                pass
+        
+        # Método 3: caminhos comuns
+        if not ffmpeg_path:
+            common_paths = [
+                '/usr/bin/ffmpeg',
+                '/usr/local/bin/ffmpeg',
+                '/opt/homebrew/bin/ffmpeg',
+                shutil.which('ffmpeg')
+            ]
+            for path in common_paths:
+                if path and os.path.exists(path):
+                    ffmpeg_path = path
+                    break
+        
+        # Mesmo processo para ffprobe
+        try:
+            ffprobe_result = subprocess.run(['which', 'ffprobe'], capture_output=True, text=True)
+            if ffprobe_result.returncode == 0:
+                ffprobe_path = ffprobe_result.stdout.strip()
+        except:
+            pass
+        
+        if not ffprobe_path:
+            common_paths = [
+                '/usr/bin/ffprobe',
+                '/usr/local/bin/ffprobe',
+                '/opt/homebrew/bin/ffprobe',
+                shutil.which('ffprobe')
+            ]
+            for path in common_paths:
+                if path and os.path.exists(path):
+                    ffprobe_path = path
+                    break
+        
+        # Testar se funcionam
         if ffmpeg_path and ffprobe_path:
             test_result = subprocess.run([ffmpeg_path, '-version'], capture_output=True, text=True)
             available = test_result.returncode == 0
