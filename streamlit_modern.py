@@ -14,11 +14,10 @@ from pathlib import Path
 st.set_page_config(
     page_title="🎵 Modern MP3 Converter",
     page_icon="🎵",
-    layout="wide",
-    initial_sidebar_state="expanded"
+    layout="wide"
 )
 
-# CSS moderno e bonito
+# CSS moderno
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
@@ -37,16 +36,6 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         background-clip: text;
         margin-bottom: 2rem;
-        text-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-    
-    .subtitle {
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.2rem;
-        text-align: center;
-        color: #ffffff;
-        margin-bottom: 3rem;
-        opacity: 0.9;
     }
     
     .modern-card {
@@ -57,95 +46,12 @@ st.markdown("""
         margin: 1.5rem 0;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
     }
     
-    .modern-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-    }
-    
-    .feature-icon {
-        font-size: 3rem;
-        text-align: center;
-        margin-bottom: 1rem;
-    }
-    
-    .feature-title {
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.5rem;
-        font-weight: 600;
-        text-align: center;
-        color: #333;
-        margin-bottom: 1rem;
-    }
-    
-    .feature-description {
-        font-family: 'Poppins', sans-serif;
-        color: #666;
-        text-align: center;
-        line-height: 1.6;
-    }
-    
-    .quality-selector {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 1rem;
-        border-radius: 15px;
-        margin: 1rem 0;
-    }
-    
-    .status-badge {
-        font-family: 'Poppins', sans-serif;
-        font-weight: 500;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        display: inline-block;
-        margin: 0.2rem;
-        font-size: 0.9rem;
-    }
-    
-    .status-completed {
-        background: linear-gradient(135deg, #4CAF50, #45a049);
-        color: white;
-    }
-    
-    .status-failed {
-        background: linear-gradient(135deg, #f44336, #d32f2f);
-        color: white;
-    }
-    
-    .status-downloading {
-        background: linear-gradient(135deg, #2196F3, #1976D2);
-        color: white;
-    }
-    
-    .status-pending {
-        background: linear-gradient(135deg, #FF9800, #F57C00);
-        color: white;
-    }
-    
-    .download-item {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(5px);
-        border-radius: 15px;
-        padding: 1.5rem;
-        margin: 1rem 0;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        transition: all 0.3s ease;
-    }
-    
-    .download-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    }
-    
-    .sidebar .stRadio > div {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        padding: 1rem;
-        margin: 0.5rem 0;
-    }
+    .status-completed { background: #4CAF50; color: white; padding: 0.5rem 1rem; border-radius: 10px; }
+    .status-failed { background: #f44336; color: white; padding: 0.5rem 1rem; border-radius: 10px; }
+    .status-downloading { background: #2196F3; color: white; padding: 0.5rem 1rem; border-radius: 10px; }
+    .status-pending { background: #FF9800; color: white; padding: 0.5rem 1rem; border-radius: 10px; }
     
     .stButton > button {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -155,56 +61,6 @@ st.markdown("""
         padding: 0.75rem 2rem;
         font-family: 'Poppins', sans-serif;
         font-weight: 500;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-    
-    .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-    }
-    
-    .stSelectbox > div > div {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    .stTextInput > div > div {
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-    }
-    
-    .upload-area {
-        border: 2px dashed #667eea;
-        border-radius: 20px;
-        padding: 3rem;
-        text-align: center;
-        margin: 2rem 0;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-        backdrop-filter: blur(10px);
-        transition: all 0.3s ease;
-    }
-    
-    .upload-area:hover {
-        border-color: #4ecdc4;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.1));
-    }
-    
-    .progress-container {
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
-        padding: 1rem;
-        margin: 1rem 0;
-    }
-    
-    .ffmpeg-status {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-        padding: 1rem;
-        margin: 1rem 0;
-        color: white;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -219,84 +75,12 @@ for directory in [DOWNLOADS_DIR, UPLOADS_DIR]:
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-# Verificar FFmpeg
-@st.cache_resource
-def get_ffmpeg_info():
-    try:
-        # Tentar múltiplos métodos para encontrar ffmpeg
-        ffmpeg_path = None
-        ffprobe_path = None
-        
-        # Método 1: which
-        try:
-            ffmpeg_result = subprocess.run(['which', 'ffmpeg'], capture_output=True, text=True)
-            if ffmpeg_result.returncode == 0:
-                ffmpeg_path = ffmpeg_result.stdout.strip()
-        except:
-            pass
-        
-        # Método 2: whereis se which falhar
-        if not ffmpeg_path:
-            try:
-                ffmpeg_result = subprocess.run(['whereis', 'ffmpeg'], capture_output=True, text=True)
-                if ffmpeg_result.returncode == 0:
-                    paths = ffmpeg_result.stdout.split()
-                    for path in paths:
-                        if path.endswith('ffmpeg') and os.path.exists(path):
-                            ffmpeg_path = path
-                            break
-            except:
-                pass
-        
-        # Método 3: caminhos comuns
-        if not ffmpeg_path:
-            common_paths = [
-                '/usr/bin/ffmpeg',
-                '/usr/local/bin/ffmpeg',
-                '/opt/homebrew/bin/ffmpeg',
-                shutil.which('ffmpeg')
-            ]
-            for path in common_paths:
-                if path and os.path.exists(path):
-                    ffmpeg_path = path
-                    break
-        
-        # Mesmo processo para ffprobe
-        try:
-            ffprobe_result = subprocess.run(['which', 'ffprobe'], capture_output=True, text=True)
-            if ffprobe_result.returncode == 0:
-                ffprobe_path = ffprobe_result.stdout.strip()
-        except:
-            pass
-        
-        if not ffprobe_path:
-            common_paths = [
-                '/usr/bin/ffprobe',
-                '/usr/local/bin/ffprobe',
-                '/opt/homebrew/bin/ffprobe',
-                shutil.which('ffprobe')
-            ]
-            for path in common_paths:
-                if path and os.path.exists(path):
-                    ffprobe_path = path
-                    break
-        
-        # Testar se funcionam
-        if ffmpeg_path and ffprobe_path:
-            test_result = subprocess.run([ffmpeg_path, '-version'], capture_output=True, text=True)
-            available = test_result.returncode == 0
-        else:
-            available = False
-            
-        return {
-            'available': available,
-            'ffmpeg_path': ffmpeg_path,
-            'ffprobe_path': ffprobe_path
-        }
-    except Exception as e:
-        return {'available': False, 'ffmpeg_path': None, 'ffprobe_path': None, 'error': str(e)}
+# FFmpeg - Caminho fixo do Nix
+FFMPEG_PATH = "/nix/store/3zc5jbvqzrn8zmva4fx5p0nh4yy03wk4-ffmpeg-6.1.1-bin/bin/ffmpeg"
+FFPROBE_PATH = "/nix/store/3zc5jbvqzrn8zmva4fx5p0nh4yy03wk4-ffmpeg-6.1.1-bin/bin/ffprobe"
 
-FFMPEG_INFO = get_ffmpeg_info()
+# Verificar se FFmpeg existe
+FFMPEG_AVAILABLE = os.path.exists(FFMPEG_PATH) and os.path.exists(FFPROBE_PATH)
 
 # Banco de dados
 def init_db():
@@ -319,16 +103,6 @@ def init_db():
             is_local_file BOOLEAN DEFAULT 0
         )
     ''')
-    
-    # Verificar colunas
-    cursor.execute("PRAGMA table_info(downloads)")
-    columns = [col[1] for col in cursor.fetchall()]
-    
-    if 'is_local_file' not in columns:
-        cursor.execute('ALTER TABLE downloads ADD COLUMN is_local_file BOOLEAN DEFAULT 0')
-    if 'quality' not in columns:
-        cursor.execute('ALTER TABLE downloads ADD COLUMN quality TEXT DEFAULT "best"')
-    
     conn.commit()
     conn.close()
 
@@ -391,14 +165,7 @@ def delete_download(download_id):
     conn.close()
 
 def is_valid_url(url):
-    url_pattern = re.compile(
-        r'^https?://'
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+[A-Z]{2,6}\.?|'
-        r'localhost|'
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'
-        r'(?::\d+)?'
-        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-    return url_pattern.match(url) is not None
+    return url.startswith('http')
 
 def detect_platform(url):
     if 'youtube.com' in url or 'youtu.be' in url:
@@ -427,7 +194,7 @@ def convert_local_to_mp3(file_path, download_id):
         update_download(download_id, title=name_without_ext, filename=output_filename, progress=30)
         
         cmd = [
-            FFMPEG_INFO['ffmpeg_path'], '-i', file_path,
+            FFMPEG_PATH, '-i', file_path,
             '-vn', '-acodec', 'libmp3lame',
             '-b:a', '320k', '-ar', '44100', '-ac', '2',
             '-y', output_path
@@ -457,26 +224,26 @@ def download_youtube_video(download_id, url, format_type, quality):
     try:
         update_download(download_id, status='downloading', progress=5)
         
-        # Configurar qualidade baseada na seleção
+        # Configurar qualidade
         if quality == "4K (2160p)":
-            format_selector = 'bestvideo[height<=2160]+bestaudio/best[height<=2160]'
+            format_selector = 'best[height<=2160]'
         elif quality == "1080p":
-            format_selector = 'bestvideo[height<=1080]+bestaudio/best[height<=1080]'
+            format_selector = 'best[height<=1080]'
         elif quality == "720p":
-            format_selector = 'bestvideo[height<=720]+bestaudio/best[height<=720]'
+            format_selector = 'best[height<=720]'
         elif quality == "480p":
-            format_selector = 'bestvideo[height<=480]+bestaudio/best[height<=480]'
-        else:  # "Melhor Disponível"
+            format_selector = 'best[height<=480]'
+        else:
             format_selector = 'best'
         
         ydl_opts = {
             'outtmpl': os.path.join(DOWNLOADS_DIR, '%(title)s.%(ext)s'),
-            'ffmpeg_location': FFMPEG_INFO['ffmpeg_path'],
+            'ffmpeg_location': FFMPEG_PATH,
         }
         
         if format_type == 'audio':
             ydl_opts.update({
-                'format': 'bestaudio[ext=m4a]/bestaudio[ext=mp3]/bestaudio',
+                'format': 'bestaudio',
                 'postprocessors': [{
                     'key': 'FFmpegExtractAudio',
                     'preferredcodec': 'mp3',
@@ -517,59 +284,47 @@ def download_youtube_video(download_id, url, format_type, quality):
 def main():
     init_db()
     
-    # Cabeçalho moderno
     st.markdown('<h1 class="main-title">🎵 Modern MP3 Converter</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="subtitle">Converta vídeos do YouTube para MP3 e arquivos locais com qualidade premium</p>', unsafe_allow_html=True)
     
-    # Sidebar moderna
+    # Sidebar
     with st.sidebar:
         st.markdown("### 🎛️ Controles")
         
         # Status FFmpeg
-        if FFMPEG_INFO['available']:
-            st.markdown("""
-            <div class="ffmpeg-status">
-                <h4>✅ FFmpeg Ativo</h4>
-                <p>Sistema pronto para conversão</p>
-            </div>
-            """, unsafe_allow_html=True)
+        if FFMPEG_AVAILABLE:
+            st.success("✅ FFmpeg Funcionando")
         else:
-            st.markdown("""
-            <div class="ffmpeg-status">
-                <h4>❌ FFmpeg Inativo</h4>
-                <p>Verificar instalação</p>
-            </div>
-            """, unsafe_allow_html=True)
+            st.error("❌ FFmpeg não encontrado")
         
-        # Seletor de tipo
+        # Tipo de conversão
         conversion_type = st.radio(
-            "Escolha o tipo de conversão:",
+            "Tipo:",
             ["📹 YouTube", "🎵 Arquivo Local"]
         )
         
         if conversion_type == "📹 YouTube":
-            st.markdown("### 🔗 YouTube Download")
+            st.markdown("### 🔗 YouTube")
             
-            # Seletor de formato
+            # Formato
             format_type = st.selectbox(
                 "Formato:",
-                ["🎵 MP3 (Áudio)", "📹 MP4 (Vídeo)"]
+                ["🎵 MP3", "📹 MP4"]
             )
             
-            # Seletor de qualidade
+            # Qualidade
             if "MP4" in format_type:
                 quality = st.selectbox(
-                    "Qualidade do Vídeo:",
-                    ["Melhor Disponível", "4K (2160p)", "1080p", "720p", "480p"]
+                    "Qualidade:",
+                    ["Melhor", "4K (2160p)", "1080p", "720p", "480p"]
                 )
             else:
                 quality = "320kbps"
-                st.info("🎵 Áudio: 320kbps de alta qualidade")
+                st.info("🎵 Áudio: 320kbps")
             
-            url = st.text_input("Link do YouTube:", placeholder="https://www.youtube.com/watch?v=...")
+            url = st.text_input("Link:", placeholder="https://www.youtube.com/watch?v=...")
             
-            if st.button("🚀 Iniciar Download", type="primary"):
-                if FFMPEG_INFO['available']:
+            if st.button("🚀 Download", type="primary"):
+                if FFMPEG_AVAILABLE:
                     if url and is_valid_url(url):
                         platform = detect_platform(url)
                         if platform == 'youtube':
@@ -579,31 +334,30 @@ def main():
                                 target=download_youtube_video,
                                 args=(download_id, url, format_selected, quality)
                             ).start()
-                            st.success("🎉 Download iniciado!")
+                            st.success("🎉 Iniciado!")
                             time.sleep(1)
                             st.rerun()
                         else:
-                            st.error("❌ Use um link válido do YouTube")
+                            st.error("❌ Link inválido")
                     else:
-                        st.error("❌ Insira um link válido")
+                        st.error("❌ Insira um link")
                 else:
-                    st.error("❌ FFmpeg não disponível")
+                    st.error("❌ FFmpeg indisponível")
         
         else:  # Arquivo Local
-            st.markdown("### 📁 Converter Arquivo")
+            st.markdown("### 📁 Converter")
             
             uploaded_file = st.file_uploader(
-                "Selecione um arquivo:",
-                type=['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm', 'm4v', 'mp3', 'wav', 'flac', 'aac'],
-                help="Formatos suportados: MP4, AVI, MOV, WMV, FLV, MKV, WEBM, M4V, MP3, WAV, FLAC, AAC"
+                "Arquivo:",
+                type=['mp4', 'avi', 'mov', 'wmv', 'flv', 'mkv', 'webm', 'm4v']
             )
             
             if uploaded_file is not None:
                 file_size = len(uploaded_file.getvalue())
                 st.info(f"📄 {uploaded_file.name} ({format_file_size(file_size)})")
                 
-                if st.button("🎵 Converter para MP3", type="primary"):
-                    if FFMPEG_INFO['available']:
+                if st.button("🎵 Converter MP3", type="primary"):
+                    if FFMPEG_AVAILABLE:
                         file_path = os.path.join(UPLOADS_DIR, uploaded_file.name)
                         with open(file_path, "wb") as f:
                             f.write(uploaded_file.getbuffer())
@@ -615,14 +369,14 @@ def main():
                             args=(file_path, download_id)
                         ).start()
                         
-                        st.success("🎉 Conversão iniciada!")
+                        st.success("🎉 Iniciado!")
                         time.sleep(1)
                         st.rerun()
                     else:
-                        st.error("❌ FFmpeg não disponível")
+                        st.error("❌ FFmpeg indisponível")
     
-    # Área principal - Lista de downloads
-    st.markdown("## 📋 Downloads & Conversões")
+    # Downloads
+    st.markdown("## 📋 Downloads")
     
     downloads = get_downloads()
     
@@ -632,7 +386,7 @@ def main():
              filename, file_size, error_message, created_at, is_local_file) = download
             
             with st.container():
-                st.markdown('<div class="download-item">', unsafe_allow_html=True)
+                st.markdown('<div class="modern-card">', unsafe_allow_html=True)
                 
                 col1, col2, col3 = st.columns([3, 1, 1])
                 
@@ -647,31 +401,26 @@ def main():
                 
                 with col2:
                     if status == 'completed':
-                        st.markdown('<span class="status-badge status-completed">✅ Concluído</span>', unsafe_allow_html=True)
+                        st.markdown('<span class="status-completed">✅ OK</span>', unsafe_allow_html=True)
                     elif status == 'failed':
-                        st.markdown('<span class="status-badge status-failed">❌ Falhou</span>', unsafe_allow_html=True)
+                        st.markdown('<span class="status-failed">❌ Erro</span>', unsafe_allow_html=True)
                     elif status == 'downloading':
-                        st.markdown('<span class="status-badge status-downloading">⏬ Baixando</span>', unsafe_allow_html=True)
+                        st.markdown('<span class="status-downloading">⏬ Baixando</span>', unsafe_allow_html=True)
                     else:
-                        st.markdown('<span class="status-badge status-pending">⏳ Pendente</span>', unsafe_allow_html=True)
+                        st.markdown('<span class="status-pending">⏳ Aguardando</span>', unsafe_allow_html=True)
                 
                 with col3:
-                    if st.button("🗑️", key=f"delete_{id}", help="Deletar"):
+                    if st.button("🗑️", key=f"delete_{id}"):
                         delete_download(id)
                         st.rerun()
                 
-                # Barra de progresso
                 if status == 'downloading':
-                    st.markdown('<div class="progress-container">', unsafe_allow_html=True)
                     st.progress(progress / 100)
                     st.caption(f"Progresso: {progress}%")
-                    st.markdown('</div>', unsafe_allow_html=True)
                 
-                # Informações do arquivo
                 if filename and file_size:
                     st.caption(f"📄 {filename} ({file_size})")
                 
-                # Botão de download
                 if status == 'completed' and filename:
                     file_path = os.path.join(DOWNLOADS_DIR, filename)
                     if os.path.exists(file_path):
@@ -685,18 +434,16 @@ def main():
                                 key=f"download_{id}"
                             )
                 
-                # Mostrar erro
                 if error_message:
                     st.error(f"Erro: {error_message}")
                 
                 st.markdown('</div>', unsafe_allow_html=True)
         
-        # Auto-refresh
         if any(download[6] == 'downloading' for download in downloads):
             time.sleep(2)
             st.rerun()
     else:
-        st.info("🎵 Nenhum download encontrado. Use o painel lateral para começar.")
+        st.info("🎵 Nenhum download. Use o painel lateral.")
 
 if __name__ == "__main__":
     main()
